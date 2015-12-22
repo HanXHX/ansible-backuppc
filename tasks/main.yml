@@ -1,0 +1,48 @@
+---
+
+- name: APT | Install BackupPC and few related tools
+  apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=3600
+  with_items:
+    - backuppc
+    - fcgiwrap
+
+- name: APT | Install ohai
+  apt: pkg=ohai state=present
+  register: ohai
+ 
+- name: SETUP | with ohai
+  action: setup
+  when: ohai.changed
+
+- name: USER | Create SSH key for backuppc user
+  user: >
+    name=backuppc
+    generate_ssh_key=yes
+    ssh_key_comment=backuppc@{{ backuppc_server_name }}
+
+- name: FILE | Create fetched dir
+  become: no
+  file: path={{ backuppc_local_fetch_dir }} state=directory
+
+- name: FETCH | Get SSH pub key
+  fetch: >
+    src={{ ohai_etc.passwd.backuppc.dir }}/.ssh/id_rsa.pub 
+    dest={{ backuppc_local_fetch_dir }}/id_rsa.pub
+
+- name: TEMPLATE | Put config to BackupPC server
+  template: >
+    src=host_config.pl.j2
+    dest='/etc/backuppc/{{ item.hostname }}.pl'
+    owner=backuppc
+    group=www-data
+    mode=0640
+  notify: restart backuppc
+  with_items: backuppc_hosts
+
+# TODO: manage deleted hosts 
+
+- name: LINEINFILE | Add host to BackupPC server
+  lineinfile: dest=/etc/backuppc/hosts line="{{ item.hostname }}\t0\tbackuppc"
+  notify: restart backuppc
+  with_items: backuppc_hosts
+

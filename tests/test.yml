@@ -1,0 +1,16 @@
+---
+
+- hosts: all
+  pre_tasks:
+    - apt: pkg={{ item }} update_cache=yes cache_valid_time=3600 state=present
+      with_items:
+        - vim
+        - nginx
+    - copy: src=vhost_nginx dest=/etc/nginx/sites-available/default
+      notify: reload nginx
+  handlers:
+    - name: reload nginx
+      service: name=nginx state=reloaded
+  roles:
+    - ../../
+

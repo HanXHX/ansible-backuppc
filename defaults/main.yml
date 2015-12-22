@@ -1,0 +1,5 @@
+---
+
+backuppc_server_name: "{{ ansible_hostname }}"
+backuppc_local_fetch_dir: "./fetch"
+backuppc_hosts: []

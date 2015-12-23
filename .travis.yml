@@ -1,0 +1,12 @@
+env:
+  - PLATFORM=debian-jessie
+
+sudo: required
+
+language: python
+
+services:
+  - docker
+
+script:
+  - docker build -f tests/$PLATFORM.Dockerfile -t test-$PLATFORM . && docker run --name $PLATFORM test-$PLATFORM

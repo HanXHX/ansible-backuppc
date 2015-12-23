@@ -30,6 +30,15 @@
     dest={{ backuppc_local_fetch_dir }}/id_rsa.pub
     flat=yes
 
+- name: TEMPLATE | Global BackupPC configuration
+  template: >
+    src=etc/backuppc/config.pl.j2
+    dest='/etc/backuppc/config.pl'
+    owner=backuppc
+    group=www-data
+    mode=0640
+  notify: restart backuppc
+
 - name: TEMPLATE | Put config to BackupPC server
   template: >
     src=etc/backuppc/_host_config.pl.j2

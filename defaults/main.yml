@@ -3,3 +3,17 @@
 backuppc_server_name: "{{ ansible_hostname }}"
 backuppc_local_fetch_dir: "./fetch"
 backuppc_hosts: []
+
+#
+# Global configuration
+#
+backuppc_ServerPort: -1
+backuppc_ServerMesgSecret: ''
+backuppc_MaxBackups: 4
+backuppc_MaxUserBackups: 4
+backuppc_MaxBackupPCNightlyJobs: 2
+backuppc_BackupPCNightlyPeriod: 1
+backuppc_MaxOldLogFiles: 14
+backuppc_FullPeriod: 6.97
+backuppc_IncrPeriod: 0.97
+backuppc_PingMaxMsec: 200

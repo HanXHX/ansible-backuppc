@@ -1,38 +1,105 @@
-Role Name
-=========
+BackupPC Ansible role
+=====================
 
-A brief description of the role goes here.
+[![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-HanXHX.backuppc-blue.svg)](https://galaxy.ansible.com/detail#/role/6645) [![Build Status](https://travis-ci.org/HanXHX/ansible-backuppc.svg?branch=master)](https://travis-ci.org/HanXHX/ansible-nginx) 
+
+This role installs and configures Backuppc. It works on Debian Jessie. It can work on Ubuntu or other Debian-based systems. But no direct support will be added (PR accepted).
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+None.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+### Role var
+
+- `backuppc_server_name`: fqdn of the backup server
+- `backuppc_local_fetch_dir`: local dir where you fetch backuppc SSH public key
+- `backuppc_hosts`: clients list to backup (see below)
+
+### Client vars
+
+Each client configuration override global configuration.
+
+- `hostname`: (M) hostname of the host
+- `state`: (O) absent or present (default)
+- `include_files:`: (O) default files (directories) list to backup.
+- `exclude_files:`: (O) default files (directories) list to exclude in backup
+- `more`: (O) hash with specific key/value (usefull for custom directives)
+
+(O): Optional (M): Mandatory
+
+
+### Global configuration
+
+You should [RTFM](http://backuppc.sourceforge.net/faq/BackupPC.html) for these variables:
+
+- `backuppc_ServerPort`
+- `backuppc_ServerMesgSecret`
+- `backuppc_MaxBackups`
+- `backuppc_MaxUserBackups`
+- `backuppc_MaxBackupPCNightlyJobs`
+- `backuppc_BackupPCNightlyPeriod`
+- `backuppc_MaxOldLogFiles`
+- `backuppc_FullPeriod`
+- `backuppc_IncrPeriod`
+- `backuppc_PingMaxMsec`
+
+Other global configuration can be managed (you can create issues or PR).
+
+Notes
+-----
+
+### About HTTP
+
+This role doesn't manage any webserver! You _must_ use another role to install a HTTP service _before_ this role. It doesn't manage any authentication.
+
+Be careful, in Debian based systems, backuppc depends [httpd virtual package](https://packages.debian.org/jessie/httpd). If you don't install any HTTP server, Debian will install Apache2. However, you can use [my Nginx role](https://github.com/HanXHX/ansible-nginx) which is compatible with this role.
+
+### About backups
+
+This role downloads backuppc SSH public key. You must deploy it on each clients!
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+None.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+### Quick and dirty
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+You should look at [defaults/main.yml](defaults/main.yml).
+
+### With my Nginx role
+
+```
+- hosts: backup
+  vars:
+    nginx_vhosts:
+      - name: backup.mydomain.tld
+        template: _backuppc
+		htpasswd: backuppc
+    nginx_htpasswd:
+      - name: backuppc
+        description: 'Please login'
+        users:
+          - name: hx
+            password: myPassword
+  roles:
+    - HanXHX.nginx
+    - HanXHX.backuppc
+```
 
 License
 -------
 
-BSD
+GPLv2
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+- Twitter: [@hanx\_hx](https://twitter.com/hanxhx_)

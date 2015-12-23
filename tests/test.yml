@@ -11,6 +11,24 @@
   handlers:
     - name: reload nginx
       service: name=nginx state=reloaded
+  vars:
+    backuppc_hosts:
+      - hostname: localhost
+        state: present
+        include_files:
+          - /root
+          - /etc
+          - /var
+        exclude_files:
+          - /var/lib/mysql
+          - /var/log
+          - /var/cache
+        more:
+          DumpPreUserCmd: '$sshPath -q -x -l root $host echo "I can dump mysql here!"'
   roles:
     - ../../
+  post_tasks:
+    - authorized_key: >
+        user=root
+        key="{{ lookup('file', './fetch/id_rsa.pub') }}"
 

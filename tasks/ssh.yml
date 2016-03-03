@@ -7,9 +7,8 @@
     flat=yes
   when: backkuppc_fetch_ssh_key
 
-- name: LINEINFILE | Configure SSH
-  lineinfile: >
+- name: COPY | Configure SSH
+  copy: >
+    content='Host *\n\tStrictHostKeyChecking no\n'
     dest={{ ohai_etc.passwd.backuppc.dir }}/.ssh/config
-    regexp='^Host \*'
-    line='Host *\n\tStrictHostKeyChecking no'
-    create=yes
+    owner=backuppc

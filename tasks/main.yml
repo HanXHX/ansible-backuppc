@@ -9,7 +9,7 @@
 - name: APT | Install ohai
   apt: pkg=ohai state=present
   register: ohai
- 
+
 - name: SETUP | with ohai
   action: setup
   when: ohai.changed
@@ -20,15 +20,12 @@
     generate_ssh_key=yes
     ssh_key_comment=backuppc@{{ backuppc_server_name }}
 
-- name: FILE | Create fetched dir
-  become: no
-  file: path={{ backuppc_local_fetch_dir }} state=directory
-
 - name: FETCH | Get SSH pub key
   fetch: >
-    src={{ ohai_etc.passwd.backuppc.dir }}/.ssh/id_rsa.pub 
+    src={{ ohai_etc.passwd.backuppc.dir }}/.ssh/id_rsa.pub
     dest={{ backuppc_local_fetch_dir }}/id_rsa.pub
     flat=yes
+  when: backkuppc_fetch_ssh_key
 
 - name: TEMPLATE | Global BackupPC configuration
   template: >

@@ -10,6 +10,11 @@ Requirements
 
 None.
 
+Note
+----
+
+At this time, this role only manage backup via rsync (+ ssh) method.
+
 Role Variables
 --------------
 
@@ -47,6 +52,8 @@ You should [RTFM](http://backuppc.sourceforge.net/faq/BackupPC.html) for these v
 - `backuppc_FullPeriod`
 - `backuppc_IncrPeriod`
 - `backuppc_PingMaxMsec`
+- `backuppc_RsyncClientCmd`
+- `backuppc_RsyncClientRestoreCmd`
 
 Other global configuration can be managed (you can create issues or PR).
 
@@ -103,4 +110,4 @@ GPLv2
 Author Information
 ------------------
 
-- Twitter: [@hanx\_hx](https://twitter.com/hanxhx_)
+- Twitter: [@hanx_hx](https://twitter.com/hanxhx_)

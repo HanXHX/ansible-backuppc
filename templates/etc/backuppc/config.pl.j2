@@ -1221,7 +1221,7 @@ $Conf{RsyncClientPath} = '/usr/bin/rsync';
 #
 # This setting only matters if $Conf{XferMethod} = 'rsync'.
 #
-$Conf{RsyncClientCmd} = '$sshPath -q -x -l root $host $rsyncPath $argList+';
+$Conf{RsyncClientCmd} = '{{ backuppc_RsyncClientCmd }}';
 
 #
 # Full command to run rsync for restore on the client.  The following
@@ -1242,7 +1242,7 @@ $Conf{RsyncClientCmd} = '$sshPath -q -x -l root $host $rsyncPath $argList+';
 # needs to be a full path and you can't include shell syntax like
 # redirection and pipes; put that in a script if you need it.
 #
-$Conf{RsyncClientRestoreCmd} = '$sshPath -q -x -l root $host $rsyncPath $argList+';
+$Conf{RsyncClientRestoreCmd} = '{{ backuppc_RsyncClientRestoreCmd }}';
 
 #
 # Share name to backup.  For $Conf{XferMethod} = "rsync" this should

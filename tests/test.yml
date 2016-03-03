@@ -12,8 +12,11 @@
     - name: reload nginx
       service: name=nginx state=reloaded
   vars:
+    backkuppc_fetch_ssh_key: true
+    backuppc_RsyncClientCmd: '$sshPath -q -x -l backuppc $host sudo $rsyncPath $argList+'
+    backuppc_RsyncClientRestoreCmd: '$sshPath -q -x -l backuppc $host sudo $rsyncPath $argList+'
     backuppc_hosts:
-      - hostname: localhost
+      - hostname: 192.168.65.92
         state: present
         include_files:
           - /root
@@ -24,11 +27,7 @@
           - /var/log
           - /var/cache
         more:
-          DumpPreUserCmd: '$sshPath -q -x -l root $host echo "I can dump mysql here!"'
+          DumpPreUserCmd: '$sshPath -q -x -l backuppc $host echo "I can dump mysql here!"'
   roles:
     - ../../
-  post_tasks:
-    - authorized_key: >
-        user=root
-        key="{{ lookup('file', './fetch/id_rsa.pub') }}"
 

@@ -62,3 +62,10 @@
   with_items: backuppc_hosts
   notify: restart backuppc
 
+- name: LINEINFILE | Configure SSH
+  lineinfile: >
+    dest={{ ohai_etc.passwd.backuppc.dir }}/.ssh/config
+    regexp='^Host \*'
+    line='Host *\n\tStrictHostKeyChecking no'
+    create=yes
+

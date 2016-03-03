@@ -1,0 +1,27 @@
+---
+
+- hosts: all
+  vars:
+    backuped_user: 'backuppc'
+
+  tasks:
+    - name: USER | Add specific to user (no root login!)
+      user: >
+        name='{{ backuped_user }}'
+        shell=/bin/bash
+        comment='User for BackupPC'
+
+    - name: AUTHORIZED_KEY | Add backkupc's key to backuped user
+      authorized_key: >
+        user='{{ backuped_user }}'
+        key="{{ item }}"
+      with_file:
+        - fetch/id_rsa.pub
+
+    - name: COPY | sudoers
+      copy: >
+        content='{{ backuped_user }} ALL=NOPASSWD{{ ":" }} /usr/bin/rsync\n'
+        dest=/home/hanx/tmp/prouuuuuuuuuuuut.txt
+        mode=0440
+        dest='/etc/sudoers.d/backuppc'
+        validate='visudo -cf %s'

@@ -1,0 +1,21 @@
+---
+
+- name: APT | Install BackupPC and few related tools
+  apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=3600
+  with_items:
+    - backuppc
+    - fcgiwrap
+
+- name: APT | Install ohai
+  apt: pkg=ohai state=present
+  register: ohai
+
+- name: SETUP | with ohai
+  action: setup
+  when: ohai.changed
+
+- name: USER | Create SSH key for backuppc user
+  user: >
+    name=backuppc
+    generate_ssh_key=yes
+    ssh_key_comment=backuppc@{{ backuppc_server_name }}

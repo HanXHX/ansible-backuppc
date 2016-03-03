@@ -1,0 +1,36 @@
+---
+
+- name: TEMPLATE | Global BackupPC configuration
+  template: >
+    src=etc/backuppc/config.pl.j2
+    dest='/etc/backuppc/config.pl'
+    owner=backuppc
+    group=www-data
+    mode=0640
+  notify: restart backuppc
+
+- name: TEMPLATE | Put config to BackupPC server
+  template: >
+    src=etc/backuppc/_host_config.pl.j2
+    dest='/etc/backuppc/{{ item.hostname }}.pl'
+    owner=backuppc
+    group=www-data
+    mode=0644
+  with_items: backuppc_hosts
+  when: item.state is not defined or item.state == 'present'
+  notify: restart backuppc
+
+- name: FILE | Delete config if needed
+  file: path='/etc/backuppc/{{ item.hostname }}.pl' state=absent
+  with_items: backuppc_hosts
+  when: item.state is defined and item.state == 'absent'
+  notify: restart backuppc
+
+- name: LINEINFILE | Add host to BackupPC server
+  lineinfile: >
+    dest=/etc/backuppc/hosts
+    line="{{ item.hostname }}\t0\tbackuppc"
+    regexp="^{{ item.hostname }}"
+    state={{ item.state if item.state is defined else 'present' }}
+  with_items: backuppc_hosts
+  notify: restart backuppc

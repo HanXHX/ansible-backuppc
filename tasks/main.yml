@@ -1,71 +1,10 @@
 ---
 
-- name: APT | Install BackupPC and few related tools
-  apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=3600
-  with_items:
-    - backuppc
-    - fcgiwrap
+- name: INCLUDE | Install
+  include: install.yml
 
-- name: APT | Install ohai
-  apt: pkg=ohai state=present
-  register: ohai
+- name: INCLUDE | Configuration
+  include: config.yml
 
-- name: SETUP | with ohai
-  action: setup
-  when: ohai.changed
-
-- name: USER | Create SSH key for backuppc user
-  user: >
-    name=backuppc
-    generate_ssh_key=yes
-    ssh_key_comment=backuppc@{{ backuppc_server_name }}
-
-- name: FETCH | Get SSH pub key
-  fetch: >
-    src={{ ohai_etc.passwd.backuppc.dir }}/.ssh/id_rsa.pub
-    dest={{ backuppc_local_fetch_dir }}/id_rsa.pub
-    flat=yes
-  when: backkuppc_fetch_ssh_key
-
-- name: TEMPLATE | Global BackupPC configuration
-  template: >
-    src=etc/backuppc/config.pl.j2
-    dest='/etc/backuppc/config.pl'
-    owner=backuppc
-    group=www-data
-    mode=0640
-  notify: restart backuppc
-
-- name: TEMPLATE | Put config to BackupPC server
-  template: >
-    src=etc/backuppc/_host_config.pl.j2
-    dest='/etc/backuppc/{{ item.hostname }}.pl'
-    owner=backuppc
-    group=www-data
-    mode=0644
-  with_items: backuppc_hosts
-  when: item.state is not defined or item.state == 'present'
-  notify: restart backuppc
-
-- name: FILE | Delete config if needed
-  file: path='/etc/backuppc/{{ item.hostname }}.pl' state=absent
-  with_items: backuppc_hosts
-  when: item.state is defined and item.state == 'absent'
-  notify: restart backuppc
-
-- name: LINEINFILE | Add host to BackupPC server
-  lineinfile: >
-    dest=/etc/backuppc/hosts
-    line="{{ item.hostname }}\t0\tbackuppc"
-    regexp="^{{ item.hostname }}"
-    state={{ item.state if item.state is defined else 'present' }}
-  with_items: backuppc_hosts
-  notify: restart backuppc
-
-- name: LINEINFILE | Configure SSH
-  lineinfile: >
-    dest={{ ohai_etc.passwd.backuppc.dir }}/.ssh/config
-    regexp='^Host \*'
-    line='Host *\n\tStrictHostKeyChecking no'
-    create=yes
-
+- name: INCLUDE | SSH related configuration
+  include: ssh.yml

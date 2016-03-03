@@ -1,0 +1,15 @@
+---
+
+- name: FETCH | Get SSH pub key
+  fetch: >
+    src={{ ohai_etc.passwd.backuppc.dir }}/.ssh/id_rsa.pub
+    dest={{ backuppc_local_fetch_dir }}/id_rsa.pub
+    flat=yes
+  when: backkuppc_fetch_ssh_key
+
+- name: LINEINFILE | Configure SSH
+  lineinfile: >
+    dest={{ ohai_etc.passwd.backuppc.dir }}/.ssh/config
+    regexp='^Host \*'
+    line='Host *\n\tStrictHostKeyChecking no'
+    create=yes

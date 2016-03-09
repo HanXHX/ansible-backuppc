@@ -12,3 +12,11 @@
     content='Host *\n\tStrictHostKeyChecking no\n'
     dest={{ ohai_etc.passwd.backuppc.dir }}/.ssh/config
     owner=backuppc
+
+- name: COMMAND | Show SSH pub key
+  command: "cat {{ ohai_etc.passwd.backuppc.dir }}/.ssh/id_rsa.pub"
+  register: cat
+  changed_when: false
+
+- name: DEBUG | SSH pub key
+  debug: var=cat.stdout

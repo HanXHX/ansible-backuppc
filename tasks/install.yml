@@ -5,6 +5,7 @@
   with_items:
     - backuppc
     - fcgiwrap
+    - libfile-rsyncp-perl
 
 - name: APT | Install ohai
   apt: pkg=ohai state=present

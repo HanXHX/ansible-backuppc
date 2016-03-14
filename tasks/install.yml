@@ -6,14 +6,12 @@
     - backuppc
     - fcgiwrap
     - libfile-rsyncp-perl
-
-- name: APT | Install ohai
-  apt: pkg=ohai state=present
-  register: ohai
+    - ohai
+  register: install
 
 - name: SETUP | with ohai
   action: setup
-  when: ohai.changed
+  when: install.changed
 
 - name: USER | Create SSH key for backuppc user
   user: >

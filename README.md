@@ -21,6 +21,7 @@ Role Variables
 ### Role var
 
 - `backuppc_server_name`: fqdn of the backup server
+- `backuppc_ssh_key_bits`: set length of ssh key pair (optional, default 2048 by Ansible)
 - `backkuppc_fetch_ssh_key`: copy backkupc ssh key from server (boolean)
 - `backuppc_local_fetch_dir`: local dir where you fetch backuppc SSH public key
 - `backuppc_hosts`: clients list to backup (see below)

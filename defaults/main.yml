@@ -8,6 +8,7 @@ backuppc_hosts: []
 #
 # Global configuration
 #
+backuppc_ServerHost: jessie-amd64
 backuppc_ServerPort: -1
 backuppc_ServerMesgSecret: ''
 backuppc_MaxBackups: 4

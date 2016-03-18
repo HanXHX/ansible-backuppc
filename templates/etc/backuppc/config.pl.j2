@@ -48,7 +48,7 @@
 #
 $ENV{'PATH'} = '/bin:/usr/bin';
 delete @ENV{'IFS', 'CDPATH', 'ENV', 'BASH_ENV'};
-$Conf{ServerHost} = 'jessie-amd64';
+$Conf{ServerHost} = '{{ backuppc_ServerHost }}';
 chomp($Conf{ServerHost});
 
 #

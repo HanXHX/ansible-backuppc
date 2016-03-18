@@ -24,6 +24,10 @@ Role Variables
 - `backuppc_ssh_key_bits`: set length of ssh key pair (optional, default 2048 by Ansible)
 - `backuppc_fetch_ssh_key`: copy backkupc ssh key from server (boolean)
 - `backuppc_local_fetch_dir`: local dir where you fetch backuppc SSH public key
+- `backuppc_hosts_configure`: add group/user, place SSH public key and setup sudo rule on backuppc_hosts (optional)
+- `backuppc_hosts_gid`: GID of backuppc group on hosts (optional, not backuppc server)
+- `backuppc_hosts_uid`: UID of backuppc user on hosts (optional, not backuppc server)
+- `backuppc_hosts_ssh_keyotions`: global key options for SSH key in authorized_keys file (optional, useable to restrict from or command)
 - `backuppc_hosts`: clients list to backup (see below)
 
 ### Client vars
@@ -34,6 +38,9 @@ Each client configuration override global configuration.
 - `state`: (O) absent or present (default)
 - `include_files:`: (O) default files (directories) list to backup.
 - `exclude_files:`: (O) default files (directories) list to exclude in backup
+- `gid`: (O) GID of backuppc group on this host (overrides backuppc_hosts_gid)
+- `uid`: (O) UID of backuppc user on this host (overrides backuppc_hosts_uid)
+- `ssh_keyoptions`: (O) host specific option for SSH key in authorized_keys file (overrides backuppc_hosts_ssh_keyotions)
 - `more`: (O) hash with specific key/value (usefull for custom directives)
 
 (O): Optional (M): Mandatory

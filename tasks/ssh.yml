@@ -20,3 +20,46 @@
 
 - name: DEBUG | SSH pub key
   debug: var=cat.stdout
+
+- block:
+  - name: GROUP | Create backuppc group
+    group:
+      name: backuppc
+      gid: "{{ item.gid if item.gid is defined else backuppc_hosts_gid | default (omit) }}"
+      state: "{{ item.state | default (present) }}"
+    delegate_to: "{{ item.hostname }}"
+    with_items: "{{ backuppc_hosts }}"
+
+  - name: USER | Create backkupc user
+    user:
+      name: backuppc
+      uid: "{{ item.uid if item.uid is defined else backuppc_hosts_uid | default (omit) }}"
+      groups: backuppc
+      shell: '/bin/sh'
+      state: "{{ item.state | default (present) }}"
+      comment: 'BackupPC user'
+    delegate_to: "{{ item.hostname }}"
+    with_items: "{{ backuppc_hosts }}"
+
+  - name: AUTHORIZED_KEY | Place public SSH key
+    authorized_key:
+      user: backuppc
+      key: "{{ lookup('file', '{{ backuppc_local_fetch_dir }}/id_rsa.pub') }}"
+      key_options: "{{ item.ssh_keyoptions if item.ssh_keyoptions is defined else backuppc_hosts_ssh_keyotions | default (omit) }}"
+      state: "{{ item.state | default (present) }}"
+    delegate_to: "{{ item.hostname }}"
+    with_items: "{{ backuppc_hosts }}"
+    when: item.hostname != "localhost"
+
+  - name: LINEINFILE | Grant sudo privileges
+    lineinfile:
+      dest: /etc/sudoers.d/backuppc
+      create: yes
+      line: 'backuppc  ALL=NOPASSWD: /usr/bin/rsync --server --sender *'
+      regexp: '^backuppc'
+      state: "{{ item.state | default (present) }}"
+      validate: 'visudo -cf %s'
+    delegate_to: "{{ item.hostname }}"
+    with_items: "{{ backuppc_hosts }}"
+
+  when: ansible_hostname != "{{ backuppc_server_name }}" and backuppc_hosts_configure

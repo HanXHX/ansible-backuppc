@@ -12,7 +12,7 @@
     - name: reload nginx
       service: name=nginx state=reloaded
   vars:
-    backkuppc_fetch_ssh_key: true
+    backuppc_fetch_ssh_key: true
     backuppc_RsyncClientCmd: '$sshPath -q -x -l backuppc $host sudo $rsyncPath $argList+'
     backuppc_RsyncClientRestoreCmd: '$sshPath -q -x -l backuppc $host sudo $rsyncPath $argList+'
     backuppc_hosts:

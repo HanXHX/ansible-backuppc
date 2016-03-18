@@ -1,7 +1,7 @@
 ---
 
 backuppc_server_name: "{{ ansible_hostname }}"
-backkuppc_fetch_ssh_key: false
+backuppc_fetch_ssh_key: false
 backuppc_local_fetch_dir: "./fetch"
 backuppc_hosts: []
 

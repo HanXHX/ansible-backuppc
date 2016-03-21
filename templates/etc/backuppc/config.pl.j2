@@ -719,7 +719,18 @@ $Conf{ArchiveInfoKeepCnt} = 10;
 #       '*' => ['/myFiles', '/important'],      # these are other shares
 #    };
 #
+{% if backuppc_BackupFilesOnly is defined %}
+$Conf{BackupFilesOnly} = {
+  '*' => [
+{% for item in backuppc_BackupFilesOnly %}
+    '{{ item }}'{% if not loop.last %},{% endif %}
+
+{% endfor %}
+  ]
+};
+{% elif backuppc_BackupFilesOnly is not defined %}
 $Conf{BackupFilesOnly} = {};
+{% endif %}
 
 #
 # List of directories or files to exclude from the backup.  For Smb,
@@ -775,7 +786,18 @@ $Conf{BackupFilesOnly} = {};
 #       '*' => ['/junk', '/dont_back_this_up'], # these are for other shares
 #    };
 #
+{% if backuppc_BackupFilesExclude is defined %}
+$Conf{BackupFilesExclude} = {
+  '*' => [
+{% for item in backuppc_BackupFilesExclude %}
+    '{{ item }}'{% if not loop.last %},{% endif %}
+
+{% endfor %}
+  ]
+};
+{% elif backuppc_BackupFilesExclude is not defined %}
 $Conf{BackupFilesExclude} = {};
+{% endif %}
 
 #
 # PCs that are always or often on the network can be backed up after

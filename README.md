@@ -55,6 +55,8 @@ You should [RTFM](http://backuppc.sourceforge.net/faq/BackupPC.html) for these v
 - `backuppc_PingMaxMsec`
 - `backuppc_RsyncClientCmd`
 - `backuppc_RsyncClientRestoreCmd`
+- `backuppc_BackupFilesOnly`
+- `backuppc_BackupFilesExclude`
 
 Other global configuration can be managed (you can create issues or PR).
 

@@ -928,7 +928,7 @@ $Conf{XferMethod} = 'smb';
 # will give one line per file, 2 will also show skipped files on
 # incrementals, higher values give more output.
 #
-$Conf{XferLogLevel} = 1;
+$Conf{XferLogLevel} = {{ backuppc_XferLogLevel }};
 
 #
 # Filename charset encoding on the client.  BackupPC uses utf8

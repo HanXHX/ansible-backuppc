@@ -18,6 +18,7 @@ backuppc_MaxOldLogFiles: 14
 backuppc_FullPeriod: 6.97
 backuppc_IncrPeriod: 0.97
 backuppc_PingMaxMsec: 200
+backuppc_XferLogLevel: 1
 
 # Rsync
 backuppc_RsyncClientCmd: '$sshPath -q -x -l root $host $rsyncPath $argList+'

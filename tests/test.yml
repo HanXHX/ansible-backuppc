@@ -30,6 +30,11 @@
           - /var/cache
         more:
           DumpPreUserCmd: '$sshPath -q -x -l backuppc $host echo "I can dump mysql here!"'
+      - hostname: archive
+        state: present
+        xfermethod: archive
+        more:
+          ArchiveDest: '/tmp'
   roles:
     - ../../
 

@@ -34,6 +34,7 @@ Each client configuration override global configuration.
 - `state`: (O) absent or present (default)
 - `include_files:`: (O) default files (directories) list to backup.
 - `exclude_files:`: (O) default files (directories) list to exclude in backup
+- `xfermethod`: (O) transfer method (rsync as default)
 - `more`: (O) hash with specific key/value (usefull for custom directives)
 
 (O): Optional (M): Mandatory

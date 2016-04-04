@@ -24,7 +24,8 @@ $Conf{BackupFilesExclude} = {
 };
 {% endif %}
 
-$Conf{XferMethod} = 'rsync';
+$Conf{XferMethod} = '{{ item.xfermethod | default("rsync") }}';
+
 $Conf{ClientCharsetLegacy} = 'utf-8';
 
 {% if item.more is defined %}

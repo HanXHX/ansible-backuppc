@@ -31,6 +31,15 @@ $Conf{ClientCharsetLegacy} = 'utf-8';
 {% if item.more is defined %}
 # More options...
 {% for key, value in item.more.iteritems() %}
-$Conf{{ '{' }}{{ key }}{{ '}' }} = {% if value is string %}'{{ value }}'{% else %}{{ value }}{% endif %};
+{% if value is string %}
+$Conf{{ '{' }}{{ key }}{{ '}' }} = '{{ value }}';
+{% else %}
+$Conf{{ '{' }}{{ key }}{{ '}' }} = [
+  {% for i in value %}'{{ i }}'{% if not loop.last %}, {%endif%}
+{%endfor %}
+
+];
+
+{% endif %}
 {% endfor %}
 {% endif %}

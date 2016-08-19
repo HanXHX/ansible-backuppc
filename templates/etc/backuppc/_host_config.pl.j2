@@ -35,8 +35,8 @@ $Conf{ClientCharsetLegacy} = 'utf-8';
 $Conf{{ '{' }}{{ key }}{{ '}' }} = '{{ value }}';
 {% else %}
 $Conf{{ '{' }}{{ key }}{{ '}' }} = [
-  {% for i in value %}'{{ i }}'{% if not loop.last %}, {%endif%}
-{%endfor %}
+  {% for i in value %}'{{ i }}'{% if not loop.last %}, {% endif %}
+{% endfor %}
 
 ];
 

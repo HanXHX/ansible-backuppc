@@ -35,6 +35,10 @@
         xfermethod: archive
         more:
           ArchiveDest: '/tmp'
+      - hostname: arry_in_more
+        state: present
+        more:
+          RsyncArgsExtra: ['--bwlimit=45']
   roles:
     - ../../
 

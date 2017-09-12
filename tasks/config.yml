@@ -9,7 +9,7 @@
     mode=0640
   notify: restart backuppc
 
-- name: TEMPLATE | Put config to BackupPC server
+- name: TEMPLATE | Put host specific config on BackupPC server
   template: >
     src=etc/backuppc/_host_config.pl.j2
     dest='/etc/backuppc/{{ item.hostname }}.pl'

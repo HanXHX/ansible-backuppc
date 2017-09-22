@@ -102,6 +102,12 @@ You should look at [defaults/main.yml](defaults/main.yml).
         users:
           - name: hx
             password: myPassword
+    backuppc_hosts:
+      - hostname: current-host
+        state: present
+      - hostname: removed_host
+      	state: absent
+      - hostname: oldserver
   roles:
     - HanXHX.nginx
     - HanXHX.backuppc
